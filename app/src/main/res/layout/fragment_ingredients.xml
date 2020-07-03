@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/ingredientsTextView"
         tools:text="Ingredients" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

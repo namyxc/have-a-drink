@@ -40,8 +40,10 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
 
     implementation "com.squareup.picasso:picasso:$picassoVersion"
-
     implementation "com.android.support:palette-v7:$supportLibraryVersion"
+
+    implementation "org.jetbrains.anko:anko-common:0.10.8"
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

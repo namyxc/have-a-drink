@@ -1,6 +1,5 @@
 package com.namyxc.haveadrink.view
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.namyxc.haveadrink.data.DrinkDto
@@ -10,8 +9,8 @@ class DrinkPagerAdapter(fragmentManager: FragmentManager, private val drinkDto: 
     FragmentStatePagerAdapter(fragmentManager) {
 
     override fun getItem(position: Int) = when (position) {
-        0 -> IngerdientsFragment.newInstance()
-        1 -> InstructionsFragment.newInstance()
+        0 -> IngerdientsFragment.newInstance(drinkDto.ingredients)
+        1 -> InstructionsFragment.newInstance(drinkDto.instructions)
         else -> throw IllegalArgumentException()
     }
 
