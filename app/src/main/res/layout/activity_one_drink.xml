@@ -1,9 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.OneDrinkActivity">
+
+    <TextView
+        android:id="@+id/drinkName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/titleHorizontalPadding"
+        android:paddingBottom="@dimen/titleHorizontalPadding"
+        android:textSize="@dimen/titleTextSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="Random drink name"
+        android:gravity="center"
+        android:textStyle="bold"
+        />
+    <com.namyxc.haveadrink.view.SquareImageView
+        android:id="@+id/drinkImage"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:scaleType="centerInside"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drinkName"
+        tools:src="@drawable/dummy_drink" />
+    <com.nshmura.recyclertablayout.RecyclerTabLayout
+        android:id="@+id/recyclerTabLayout"
+        app:layout_constraintTop_toBottomOf="@id/drinkImage"
+        android:layout_height="@dimen/tabs_height"
+        android:layout_width="match_parent"
+        tools:itemCount="2"
+        />
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/ingredientsInstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerTabLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
