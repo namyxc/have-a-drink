@@ -2,5 +2,7 @@
 <resources>
     <dimen name="tabs_height">20dp</dimen>
     <dimen name="titleHorizontalPadding">10dp</dimen>
-    <dimen name="titleTextSize">20dp</dimen>
+    <dimen name="titleTextSize">20sp</dimen>
+    <dimen name="fabSize">56dp</dimen>
+    <dimen name="fabMargin">10dp</dimen>
 </resources>

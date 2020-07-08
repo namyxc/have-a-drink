@@ -1,6 +1,7 @@
 package com.namyxc.haveadrink.view
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -37,6 +38,9 @@ class OneDrinkActivity : AppCompatActivity() {
                     drinkName.setTextColor(textSwatch.titleTextColor)
                     recyclerTabLayout.setIndicatorColor(textSwatch.rgb)
                     recyclerTabLayout.invalidate()
+
+                    refreshButton.backgroundTintList = ColorStateList.valueOf(textSwatch.rgb)
+                    refreshButton.imageTintList = ColorStateList.valueOf(textSwatch.titleTextColor)
                 })
         }
         override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {  }
@@ -74,6 +78,8 @@ class OneDrinkActivity : AppCompatActivity() {
                 .setPositiveButton(android.R.string.ok) { _, _ -> }
                 .setIcon(android.R.drawable.ic_dialog_alert).show()
         }
+
+        refreshButton.setOnClickListener { retrieveRandomCoctail() }
     }
 
     private fun retrieveRandomCoctail() {

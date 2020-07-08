@@ -43,5 +43,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/refreshButton"
+        android:layout_width="@dimen/fabSize"
+        android:layout_height="@dimen/fabSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/fabMargin"
+        android:layout_marginBottom="@dimen/fabMargin"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_sync_solid"
+        android:contentDescription="@string/refresh" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
