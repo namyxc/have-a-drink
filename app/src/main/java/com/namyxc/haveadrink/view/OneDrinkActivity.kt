@@ -9,17 +9,21 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.palette.graphics.Palette
 import com.namyxc.haveadrink.R
-import com.namyxc.haveadrink.api.CoctailRetriever
 import com.namyxc.haveadrink.data.DrinkDto
+import com.namyxc.haveadrink.viewmodel.DownloadState
+import com.namyxc.haveadrink.viewmodel.RandomDrinkViewModel
 import com.nshmura.recyclertablayout.RecyclerTabLayout
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_one_drink.*
-import kotlinx.coroutines.*
 import org.jetbrains.anko.displayMetrics
 
 
@@ -27,6 +31,10 @@ class OneDrinkActivity : AppCompatActivity() {
 
     private lateinit var pagerAdapter: DrinkPagerAdapter
     private lateinit var recyclerTabLayout: RecyclerTabLayout
+    private val model: RandomDrinkViewModel by viewModels()
+
+
+    private lateinit var anim: Animation
 
     private val picassoTarget = object : Target {
         override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
@@ -64,58 +72,72 @@ class OneDrinkActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_one_drink)
+        anim = AnimationUtils.loadAnimation(this, R.anim.shake)
 
+        val randomDrinkObserver = Observer<DrinkDto> {
+            displayDrink(it)
+        }
 
+        val randomDrinkStateObserver = Observer<DownloadState> {
+            when (it) {
+                DownloadState.ERROR -> {
+                    AlertDialog.Builder(this).setTitle("Error")
+                            .setMessage("valami error message")
+                            .setPositiveButton(android.R.string.ok) { _, _ -> }
+                            .setIcon(android.R.drawable.ic_dialog_alert).show()
+                    refreshButton.isEnabled = true
+                    refreshButton.clearAnimation()
+                    }
+                DownloadState.DONE -> {
+                    refreshButton.isEnabled = true
+                    refreshButton.clearAnimation()
+                }
+                DownloadState.IN_PROGRESS -> {
+                    refreshButton.isEnabled = false
+                    refreshButton.startAnimation(anim)
+                }
+            }
+        }
+
+        model.state.observe(this, randomDrinkStateObserver)
+        model.randomDrink.observe(this, randomDrinkObserver)
 
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
 
+        getRandomDrink()
+
+        refreshButton.setOnClickListener { getRandomDrink() }
+    }
+
+    private fun getRandomDrink(){
         if (isNetworkConnected()) {
-            retrieveRandomCoctail()
+            model.getRandomDrink()
         } else {
             AlertDialog.Builder(this).setTitle("No Internet Connection")
                 .setMessage("Please check your internet connection and try again")
                 .setPositiveButton(android.R.string.ok) { _, _ -> }
                 .setIcon(android.R.drawable.ic_dialog_alert).show()
         }
-
-        refreshButton.setOnClickListener { retrieveRandomCoctail() }
     }
 
-    private fun retrieveRandomCoctail() {
-        val oneDrinkActivityJob = Job()
-        val errorHandler = CoroutineExceptionHandler { _, exception ->
+    private fun displayDrink(drinkDto: DrinkDto) {
+        val width = displayMetrics.widthPixels
+        pagerAdapter = DrinkPagerAdapter(supportFragmentManager, drinkDto)
+        ingredientsInstructions.adapter = pagerAdapter
+        ingredientsInstructions.currentItem = 0
 
-            AlertDialog.Builder(this).setTitle("Error")
-                .setMessage(exception.message)
-                .setPositiveButton(android.R.string.ok) { _, _ -> }
-                .setIcon(android.R.drawable.ic_dialog_alert).show()
-        }
-        val coroutineScope = CoroutineScope(oneDrinkActivityJob + Dispatchers.Main)
-        coroutineScope.launch(errorHandler){
-            val result = CoctailRetriever().getRandomCoctail()
-            val width = displayMetrics.widthPixels
-            val firstDrink = result.drinks.first()
+        recyclerTabLayout = findViewById(R.id.recyclerTabLayout)
+        recyclerTabLayout.setUpWithViewPager(ingredientsInstructions)
 
+        drinkName.text = drinkDto.name
 
-            val drinkDto = DrinkDto(firstDrink.strDrink, firstDrink.strDrinkThumb, firstDrink.strInstructions, firstDrink.getIngredients())
-
-            pagerAdapter = DrinkPagerAdapter(supportFragmentManager, drinkDto)
-            ingredientsInstructions.adapter = pagerAdapter
-            ingredientsInstructions.currentItem = 0
-
-            recyclerTabLayout = findViewById(R.id.recyclerTabLayout)
-            recyclerTabLayout.setUpWithViewPager(ingredientsInstructions)
-
-            drinkName.text = drinkDto.name
-
-            val picasso = Picasso.get()
-            picasso.isLoggingEnabled = true
-            picasso
-                .load(drinkDto.imageUrl)
-                .resize(width, width)
-                .into(picassoTarget)
-        }
+        val picasso = Picasso.get()
+        picasso.isLoggingEnabled = true
+        picasso
+            .load(drinkDto.imageUrl)
+            .resize(width, width)
+            .into(picassoTarget)
     }
 }
 
