@@ -5,4 +5,7 @@
     <dimen name="titleTextSize">20sp</dimen>
     <dimen name="fabSize">56dp</dimen>
     <dimen name="fabMargin">10dp</dimen>
+    <dimen name="ingredientsInstructionsHorizontalMargin">20dp</dimen>
+    <dimen name="ingredientItemPadding">5dp</dimen>
+    <dimen name="ingredientsInstructionsTabVerticalMargin">10dp</dimen>
 </resources>

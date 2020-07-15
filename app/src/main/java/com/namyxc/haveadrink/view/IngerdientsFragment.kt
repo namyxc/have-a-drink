@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.namyxc.haveadrink.R
 import com.namyxc.haveadrink.data.Ingredient
 import kotlinx.android.synthetic.main.fragment_ingredients.*
-import kotlinx.android.synthetic.main.fragment_instructions.*
 import java.io.Serializable
 
 class IngerdientsFragment: Fragment() {
 
-    var ingredients: List<Ingredient>? = null
+    private var ingredients: List<Ingredient>? = null
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:
     Bundle?): View? {
@@ -24,7 +26,11 @@ class IngerdientsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ingredientsTextView.text = ingredients?.joinToString("\n", transform = {it -> "${it.name} ${it.amount}"})
+        if (ingredients != null) {
+            viewAdapter = IngredientListAdapter(ingredients!!)
+            ingredientsList.adapter = viewAdapter
+            ingredientsList.layoutManager = LinearLayoutManager(context)
+        }
     }
 
 

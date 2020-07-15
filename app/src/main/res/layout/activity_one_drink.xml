@@ -34,6 +34,9 @@
         android:layout_height="@dimen/tabs_height"
         android:layout_width="match_parent"
         tools:itemCount="2"
+        android:layout_marginStart="@dimen/ingredientsInstructionsHorizontalMargin"
+        android:layout_marginEnd="@dimen/ingredientsInstructionsHorizontalMargin"
+        android:layout_marginTop="@dimen/ingredientsInstructionsTabVerticalMargin"
         />
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/ingredientsInstructions"
@@ -41,7 +44,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/recyclerTabLayout"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="@dimen/ingredientsInstructionsHorizontalMargin"
+        android:layout_marginEnd="@dimen/ingredientsInstructionsHorizontalMargin"
+        android:layout_marginTop="@dimen/ingredientsInstructionsTabVerticalMargin"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/refreshButton"

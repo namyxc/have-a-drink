@@ -1,5 +1,6 @@
 package com.namyxc.haveadrink.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.namyxc.haveadrink.api.CoctailRetriever
@@ -20,6 +21,7 @@ class RandomDrinkViewModel  : ViewModel(){
         val oneDrinkActivityJob = Job()
         val errorHandler = CoroutineExceptionHandler { _, exception ->
             state.value = DownloadState.ERROR
+            Log.e("getRandomDrink", exception.message)
         }
         val coroutineScope = CoroutineScope(oneDrinkActivityJob + Dispatchers.Main)
         coroutineScope.launch(errorHandler){
